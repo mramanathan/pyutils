@@ -109,9 +109,9 @@ def main():
 	This tool has certain pre-requisites:
 
 	youtube-dl
-	ffmpeg
+	avconv or ffmpeg
 
-	And, it has been tested on Ubuntu 14.04 LTS with Python v2.7
+	And, it has been tested on Ubuntu 16.04 LTS with Python v2.7
 	"""
 
 	parser = argparse.ArgumentParser("Grab the audio from the given youtube url")
