@@ -52,19 +52,21 @@ def getAudio(link):
 	cmd_output = (xtraction.decode("utf-8")).split('\n')[5].split(':')[1]
 	print("Audio is saved in {}".format(cmd_output))
 
-	user_choice = input("\n== Do you want to retain this title? (YES or NO) : ")
-	
-	if (user_choice.upper() == "YES"):
-		print("We shall retain the existing title.")
-		print("{} is the title of the youtube link".format(title))
-	elif (user_choice.upper() == "NO"):
-		user_title = input("Give a new title of your choice : ")
-		user_title.strip()
-#		modfileName(cmd_output, user_title)
-		print("{} is the title of the youtube link".format(user_title))
-	else:
-		print("We shall retain the existing title.")
-		print("{} is the title of the youtube link".format(title))
+	## Should find out why file cannot be renamed after the audio
+	## extraction is done???
+#	user_choice = input("\n== Do you want to retain this title? (YES or NO) : ")
+#	
+#	if (user_choice.upper() == "YES"):
+#		print("We shall retain the existing title.")
+#		print("{} is the title of the youtube link".format(title))
+#	elif (user_choice.upper() == "NO"):
+#		user_title = input("Give a new title of your choice : ")
+#		user_title.strip()
+##		modfileName(cmd_output, user_title)
+#		print("{} is the title of the youtube link".format(user_title))
+#	else:
+#		print("We shall retain the existing title.")
+#		print("{} is the title of the youtube link".format(title))
 
 
 	return None
@@ -87,6 +89,7 @@ def videoTitle(link):
 
 
 
+# Example: To get the id from the youtube video link
 #def videoId(link):
 #    
 #	""" strip the standard youtube link 
@@ -111,7 +114,7 @@ def main():
 	youtube-dl
 	avconv or ffmpeg
 
-	And, it has been tested on Ubuntu 16.04 LTS with Python v2.7
+	And, it has been tested on Ubuntu 16.04 LTS with Python v3.5.2
 	"""
 
 	parser = argparse.ArgumentParser("Grab the audio from the given youtube url")
