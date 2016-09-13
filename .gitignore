@@ -1,6 +1,5 @@
-# vim intermediate files 
-*.*~
-*.swp
-
 ## Misc
 *.mp3
+# vim temp files
+*.*~
+*.swp
