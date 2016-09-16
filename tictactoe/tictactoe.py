@@ -63,23 +63,22 @@ def redrawGrid():
 	print("\n\n")
 	row_delim = "=" * 20
 	col_delim = "||"
-#	for g in uxip:
-#	    usedcell = "C" + str(g)
-#	    print("Cell, ", usedcell + " is at index position in grid marks : ", end=' == ')
-#	    print(grid_marks.index(usedcell), end=" ")
-#	    grid_marks[grid_marks.index(usedcell)] = "X"
-
-#	num = 1
-#	for i in range(1,5):
-#		print(row_delim + "\n")
-#		if i != 4:
-#			print(col_delim, end='')
-#			for j in range(1,4):
-#				print(" " + next(cnine) + str(num) + " ", end=col_delim)
-#				num += 1
-#			print("\n")
 
 	print("%~>" * 5 + "Used cells are : ", cells_used)
+
+	base_inc = 3
+	new_start = 0
+	new_end = base_inc
+
+	for i in range(1,5):
+		print("\t" * 2 + row_delim + "\n")
+		if i != 4:
+			print("\t" * 2 + col_delim, end='')
+			for j in range(new_start,new_end):
+				print(" " + grid_marks[j] + " ", end=col_delim)
+			new_start = new_start + base_inc
+			new_end   = new_end + base_inc
+			print("\n")
 
 	return None
 
@@ -194,26 +193,30 @@ def whoWinner():
 	"""
 
 	winset = set()
+	
 
 	for combo in win_rows.keys():
 		print("checking combo : ", win_rows[combo])
 		for cell_num in win_rows[combo]:
 			winset.add(grid_marks[cell_num])
 		print("Got this set : ", winset)
-		# set returns the unique element from ['R', 'R', 'R']
-		if len(winset) == 1:
-			game_over = True
-			print("Got the winner.")
-			break
-		else:
-			game_over = False
-			winset = set()
-			print("No winner yet!")
 
-	if game_over == True:
-		return (game_over, winset, win_rows[combo])
-	else:
-		return False,0,0
+		# set returns the unique element from ['R', 'R', 'R']
+#		if len(winset) == 1:
+#			game_over = True
+#			print("Got the winner.")
+#			break
+#		else:
+#			game_over = False
+#			winset = set()
+#			print("No winner yet!")
+
+#	if game_over == True:
+#		return (game_over, winset, win_rows[combo])
+#	else:
+#		return False,0,0
+
+	return None
 
 
 
@@ -234,31 +237,22 @@ def main():
 
 
 	while (total_cells-len(cells_used) != 0):
-		if len(cells_used) >= mincells_chkwinner:
+		print("$&" * 5 + " {} free cells available in the grid".format(total_cells-len(cells_used)))
+		userAPlay()
+		if len(cells_used) == total_cells:
 			(game_over, userset, usercells) = whoWinner()
 			if game_over == True:
 				print("Got the winner, hurray. It is, ", userset)
 				print("And, it's in the cell combo: ", usercells)
 				print("/\\/\\" * 5 + " Game over buddies!!!! " + "/\\/\\" * 5 + "\n\n")
 				exit(0)
-#			else:
-#				continue
+			else:
+				print("#$" * 5 + "Hey, it's a TIE, game over")
+				exit(0)
 		else:
 			print("$&" * 5 + " {} free cells available in the grid".format(total_cells-len(cells_used)))
-			userAPlay()
-			if len(cells_used) == total_cells:
-				(game_over, userset, usercells) = whoWinner()
-				if game_over == True:
-					print("Got the winner, hurray. It is, ", userset)
-					print("And, it's in the cell combo: ", usercells)
-					print("/\\/\\" * 5 + " Game over buddies!!!! " + "/\\/\\" * 5 + "\n\n")
-					exit(0)
-				else:
-					print("#$" * 5 + "Hey, it's a TIE, game over")
-					exit(0)
-			else:
-				print("$&" * 5 + " {} free cells available in the grid".format(total_cells-len(cells_used)))
-				userDPlay()
+			userDPlay()
+
 #		compPlay()
 
 	# Based on valid input, fill the grid
