@@ -29,7 +29,7 @@ total_cells = 9
 
 # Atleast 5 cells should be filled to determine a winner !
 # Remember, numbering starts at index 0 !!!
-mincells_chkwinner = 5
+mincells_chkwinner = 4
 
 # Keep track of cells used by the players
 cells_used = []
@@ -134,7 +134,21 @@ def userAPlay():
 		print("Valid empty (marked as CX) cells available : ", grid_marks)
 		redrawGrid()
 		print("\n")
-#		winnerStatus()
+		if (len(cells_used) >= mincells_chkwinner):
+			win_status = whoWinner()
+			if win_status == "continue":
+				print("Let us {} the game, no clear winner after {} moves".format(win_status, len(cells_used)))
+				userDPlay()
+			elif win_status == "TIE":
+				print("#$" * 5 + "Hey, it's a TIE, game over")
+				print("/\\/\\" * 5 + " Game over buddies!!!! " + "/\\/\\" * 5 + "\n\n")
+				exit(0)
+			elif win_status == "WON":
+				print("Got the winner, hurray. It is, ", win_status)
+				print("/\\/\\" * 5 + " Game over buddies!!!! " + "/\\/\\" * 5 + "\n\n")
+				exit(0)
+		else:
+			userDPlay()
 
 	return None
 
@@ -161,7 +175,21 @@ def userDPlay():
 		print("Valid empty (marked as CX) cells available : ", grid_marks)
 		redrawGrid()
 		print("\n")
-#		winnerStatus()
+		if (len(cells_used) >= mincells_chkwinner):
+			win_status = whoWinner()
+			if win_status == "continue":
+				print("Let us {} the game, no clear winner after {} moves".format(win_status, len(cells_used)))
+				userAPlay()
+			elif win_status == "TIE":
+				print("#$" * 5 + "Hey, it's a TIE, game over")
+				print("/\\/\\" * 5 + " Game over buddies!!!! " + "/\\/\\" * 5 + "\n\n")
+				exit(0)
+			elif win_status == "WON":
+				print("Got the winner, hurray. It is, ", win_status)
+				print("/\\/\\" * 5 + " Game over buddies!!!! " + "/\\/\\" * 5 + "\n\n")
+				exit(0)
+		else:
+			userAPlay()
 
 	return None
 
@@ -247,9 +275,16 @@ def whoWinner():
 	# TO DO: if len of cell used < total cells and
 	# status is not win, then continue
 	# status is win, quit
-	if len(cells_used) == total_cells:
+	if len(cells_used) == total_cells or len(cells_used) != total_cells:
+		if len(temp_set) == 1:
+			winner = "WON"
+			return winner
+
+	if len(cells_used) == total_cells and len(temp_set) != 1:
+		winner = "TIE"
 		return winner
-	else:
+
+	if len(cells_used) != total_cells and len(temp_set) != 1:
 		winner = "continue"
 		return winner
 
@@ -274,28 +309,31 @@ def main():
 		showGrid()
 
 
-	while (total_cells-len(cells_used) != 0):
-		if len(cells_used) < mincells_chkwinner:
-			print("$&" * 5 + " {} free cells available in the grid".format(total_cells-len(cells_used)))
-			userAPlay()
-			print("$&" * 5 + " {} free cells available in the grid".format(total_cells-len(cells_used)))
-			userDPlay()
-		else:
-			win_status = whoWinner()
-			if win_status == "continue":
-				print("Let us {} the game, no clear winner after {} moves".format(win_status, len(cells_used)))
-				print("$&" * 5 + " {} free cells available in the grid".format(total_cells-len(cells_used)))
-				userDPlay()
-				print("$&" * 5 + " {} free cells available in the grid".format(total_cells-len(cells_used)))
-				userAPlay()
-			elif win_status == "TIE":
-				print("#$" * 5 + "Hey, it's a TIE, game over")
-				print("/\\/\\" * 5 + " Game over buddies!!!! " + "/\\/\\" * 5 + "\n\n")
-				exit(0)
-			else:
-				print("Got the winner, hurray. It is, ", win_status)
-				print("/\\/\\" * 5 + " Game over buddies!!!! " + "/\\/\\" * 5 + "\n\n")
-				exit(0)
+	print("$&" * 5 + " {} free cells available in the grid".format(total_cells-len(cells_used)))
+	userAPlay()
+
+#	while (len(cells_used) < mincells_chkwinner):
+#		print("$&" * 5 + " {} free cells available in the grid".format(total_cells-len(cells_used)))
+#		userAPlay()
+#		print("$&" * 5 + " {} free cells available in the grid".format(total_cells-len(cells_used)))
+#		userDPlay()
+#	else:
+#		print("$&" * 5 + " {} free cells available in the grid".format(total_cells-len(cells_used)))
+#		userAPlay()
+#		print("$&" * 5 + " {} free cells available in the grid".format(total_cells-len(cells_used)))
+#		userDPlay()
+
+#		win_status = whoWinner()
+#		if win_status == "continue":
+#			print("Let us {} the game, no clear winner after {} moves".format(win_status, len(cells_used)))
+#		elif win_status == "TIE":
+#			print("#$" * 5 + "Hey, it's a TIE, game over")
+#			print("/\\/\\" * 5 + " Game over buddies!!!! " + "/\\/\\" * 5 + "\n\n")
+#			exit(0)
+#		elif win_status == "WON":
+#			print("Got the winner, hurray. It is, ", win_status)
+#			print("/\\/\\" * 5 + " Game over buddies!!!! " + "/\\/\\" * 5 + "\n\n")
+#			exit(0)
 			# TO DO: See the comments in function definition, until then
 			# we shall use userDPlay()
 #			compPlay()
