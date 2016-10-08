@@ -1,7 +1,7 @@
 # _*_ coding: utf-8 _*_
 
 ## Tested with Python 3.5.x
-#!/usr/bin/env python
+#!/usr/bin/python3
 
 
 from random import randrange
