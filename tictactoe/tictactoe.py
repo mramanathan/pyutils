@@ -1,13 +1,13 @@
 # _*_ coding: utf-8 _*_
 
 ## Tested with Python 3.5.x
-#!/usr/bin/env python
+#!/usr/bin/python3
 
 
 from random import randrange
 from itertools import repeat
-from time import sleep
-from os import system
+#from time import sleep
+#from os import system
 
 
 # used to display the used and unused cells in the grid
@@ -29,7 +29,7 @@ total_cells = 9
 
 # Atleast 5 cells should be filled to determine a winner !
 # Remember, numbering starts at index 0 !!!
-mincells_chkwinner = 5
+mincells_chkwinner = 4
 
 # Keep track of cells used by the players
 cells_used = []
@@ -57,29 +57,31 @@ cells_used = []
 
 def redrawGrid():
 
-	"""
+	""" After every move by the player, it's
+
+	good to show the latest status of the grid
+	with used and empty cells.
 	"""
 
 	print("\n\n")
 	row_delim = "=" * 20
 	col_delim = "||"
-#	for g in uxip:
-#	    usedcell = "C" + str(g)
-#	    print("Cell, ", usedcell + " is at index position in grid marks : ", end=' == ')
-#	    print(grid_marks.index(usedcell), end=" ")
-#	    grid_marks[grid_marks.index(usedcell)] = "X"
 
-#	num = 1
-#	for i in range(1,5):
-#		print(row_delim + "\n")
-#		if i != 4:
-#			print(col_delim, end='')
-#			for j in range(1,4):
-#				print(" " + next(cnine) + str(num) + " ", end=col_delim)
-#				num += 1
-#			print("\n")
+	print("%~>" * 5 + " Used cells are : ", cells_used)
 
-	print("%~>" * 5 + "Used cells are : ", cells_used)
+	base_inc = 3
+	new_start = 0
+	new_end = base_inc
+
+	for i in range(1,5):
+		print("\t" * 2 + row_delim + "\n")
+		if i != 4:
+			print("\t" * 2 + col_delim, end='')
+			for j in range(new_start,new_end):
+				print(" " + grid_marks[j] + " ", end=col_delim)
+			new_start = new_start + base_inc
+			new_end   = new_end + base_inc
+			print("\n")
 
 	return None
 
@@ -87,7 +89,9 @@ def redrawGrid():
 
 def showGrid(input=''):
 
-	"""
+	""" Initial display of the grid with some
+
+	messages for the players to make their move.
 	"""
 
 	if input == "":
@@ -111,10 +115,13 @@ def showGrid(input=''):
 
 def userAPlay():
 
-	"""
+	""" Ask for input from user and update 'grid_marks' list,
+
+	and update the status on console for next player
+	to make his / her move.
 	"""
 
-	user_choice = input("^^" * 5 + " User A: Enter a valid cell number [1-9]: ")
+	user_choice = input("\n" + "^^" * 5 + " User A: Enter a valid cell number [1-9]: ")
 	user_choice.strip()
 #	if validNum(int(user_choice)):
 	if user_choice.isdigit():
@@ -122,12 +129,26 @@ def userAPlay():
 		cells_used.append("C" + user_choice)
 		print("Cell, C" + user_choice + " is at index position in grid : ", end=' == ')
 		print(grid_marks.index("C" + user_choice)+1, end=" ")
-		print("\n")
+#		print("\n")
 		grid_marks[grid_marks.index("C" + user_choice)] = "R"
-		print("Valid empty (marked as CX) cells available : ", grid_marks)
 		redrawGrid()
-		print("\n")
-#		winnerStatus()
+		print("Valid empty (marked as CX) cells available : ", grid_marks)
+#		print("\n")
+		if (len(cells_used) >= mincells_chkwinner):
+			win_status = whoWinner()
+			if win_status == "continue":
+				print("@~!" * 5 + " Let us {} the game, no clear winner after {} moves".format(win_status, len(cells_used)) + " " + "@~!" * 5)
+				userDPlay()
+			elif win_status == "TIE":
+				print("#$" * 5 + "Hey, it's a TIE, game over")
+				print("/\\/\\" * 5 + " Game over buddies!!!! " + "/\\/\\" * 5 + "\n\n")
+				exit(0)
+			elif win_status == "WON":
+				print("Got the winner, hurray. It is, ", win_status)
+				print("/\\/\\" * 5 + " Game over buddies!!!! " + "/\\/\\" * 5 + "\n\n")
+				exit(0)
+		else:
+			userDPlay()
 
 	return None
 
@@ -135,10 +156,13 @@ def userAPlay():
 
 def userDPlay():
 
-	"""
+	""" Ask for input from user and update 'grid_marks' list,
+
+	and update the status on console for next player
+	to make his / her move.
 	"""
 
-	user_choice = input("^^" * 5 + " User D: Enter a valid cell number [1-9]: ")
+	user_choice = input("\n" + "^^" * 5 + " User D: Enter a valid cell number [1-9]: ")
 	user_choice.strip()
 #	if validNum(int(user_choice)):
 	if user_choice.isdigit():
@@ -146,18 +170,32 @@ def userDPlay():
 		cells_used.append("C" + user_choice)
 		print("Cell, C" + user_choice + " is at index position in grid : ", end=' == ')
 		print(grid_marks.index("C" + user_choice)+1, end=" ")
-		print("\n")
+#		print("\n")
 		grid_marks[grid_marks.index("C" + user_choice)] = "D"
-		print("Valid empty (marked as CX) cells available : ", grid_marks)
 		redrawGrid()
-		print("\n")
-#		winnerStatus()
+		print("Valid empty (marked as CX) cells available : ", grid_marks)
+#		print("\n")
+		if (len(cells_used) >= mincells_chkwinner):
+			win_status = whoWinner()
+			if win_status == "continue":
+				print("@~!" * 5 + " Let us {} the game, no clear winner after {} moves".format(win_status, len(cells_used)) + " " + "@~!" * 5)
+				userAPlay()
+			elif win_status == "TIE":
+				print("#$" * 5 + "Hey, it's a TIE, game over")
+				print("/\\/\\" * 5 + " Game over buddies!!!! " + "/\\/\\" * 5 + "\n\n")
+				exit(0)
+			elif win_status == "WON":
+				print("Got the winner, hurray. It is, ", win_status)
+				print("/\\/\\" * 5 + " Game over buddies!!!! " + "/\\/\\" * 5 + "\n\n")
+				exit(0)
+		else:
+			userAPlay()
 
 	return None
 
 
 
-""" On hold until we find a solution for:
+""" TODO: On hold until we find a solution for:
 how shall we retain the numbers already used and feed 
 that to random() such that when the turn of the 
 computer arrives, different cells are chosen ? 
@@ -176,12 +214,12 @@ def compPlay():
 		cells_used.append("C" + comp_choice)
 		print("Cell, C", comp_choice + " is at index position in grid : ", end=' == ')
 		print(grid_marks.index("C" + comp_choice)+1, end=" ")
-		print("\n")
+#		print("\n")
 		grid_marks[grid_marks.index("C" + comp_choice)] = "D"
-		print("Valid empty (marked as CX) cells available : ", grid_marks)
-		print("\n")
+#		print("\n")
 #		redrawGrid()
-#		winnerStatus()
+		print("Valid empty (marked as CX) cells available : ", grid_marks)
+#		whoWinner()
 
 	return None
 
@@ -189,37 +227,74 @@ def compPlay():
 
 def whoWinner():
 
+	""" Determine the winner or announce
+
+	that game ended in TIE.
+	This shall start after the 5th move
+	in the grid.
+	If there is a winner, return who is the
+	winner, winning rows, flag to stop game.
 	"""
 
-	"""
+	all_combos = []
+	rows = []
+	temp_set = set()
 
-	winset = set()
+	base_inc = 3
+	new_start = 0
+	new_end = base_inc
 
 	for combo in win_rows.keys():
-		print("checking combo : ", win_rows[combo])
+#		print("checking combo : ", win_rows[combo])
 		for cell_num in win_rows[combo]:
-			winset.add(grid_marks[cell_num])
-		print("Got this set : ", winset)
-		# set returns the unique element from ['R', 'R', 'R']
-		if len(winset) == 1:
-			game_over = True
-			print("Got the winner.")
+			all_combos.append(grid_marks[cell_num])
+
+#	print("Complete dump : ", all_combos)
+	# Match of the rows should be done for all 8 combination
+	# of rows that can net the winner !!!
+	for rpt in range(0, int( len(all_combos) / base_inc )):
+#		print("==" * 5+ " Combo : ", rpt)
+		rows = []
+		for i in range(new_start, new_end):
+#			print(all_combos[i], end=' ')
+			rows.append(all_combos[i])
+#		print("Evaluating {} for the winner".format(rows), end=' ')
+		temp_set = set(rows)
+		if len(temp_set) == 1:
+			print("Got the winner in this combo : ", temp_set)
+			winner = temp_set
 			break
 		else:
-			game_over = False
-			winset = set()
-			print("No winner yet!")
+#			print(" No winner here, moving on to next set")
+			new_start = new_start + base_inc
+			new_end   = new_end   + base_inc
+			winner = "TIE"
+#			print("\n")
 
-	if game_over == True:
-		return (game_over, winset, win_rows[combo])
-	else:
-		return False,0,0
+	# TO DO: if len of cell used < total cells and
+	# status is not win, then continue
+	# status is win, quit
+	if len(cells_used) == total_cells or len(cells_used) != total_cells:
+		if len(temp_set) == 1:
+			winner = "WON"
+			return winner
+
+	if len(cells_used) == total_cells and len(temp_set) != 1:
+		winner = "TIE"
+		return winner
+
+	if len(cells_used) != total_cells and len(temp_set) != 1:
+		winner = "continue"
+		return winner
 
 
 
 def main():
 
-	"""
+	""" Simple Tic Tac Toe game that uses
+
+	minimal built-in methods. Yeah, it's 
+	kind of weird in many places.
 	"""
 
 	# help menu
@@ -233,41 +308,12 @@ def main():
 		showGrid()
 
 
-	while (total_cells-len(cells_used) != 0):
-		if len(cells_used) >= mincells_chkwinner:
-			(game_over, userset, usercells) = whoWinner()
-			if game_over == True:
-				print("Got the winner, hurray. It is, ", userset)
-				print("And, it's in the cell combo: ", usercells)
-				print("/\\/\\" * 5 + " Game over buddies!!!! " + "/\\/\\" * 5 + "\n\n")
-				exit(0)
-#			else:
-#				continue
-		else:
-			print("$&" * 5 + " {} free cells available in the grid".format(total_cells-len(cells_used)))
-			userAPlay()
-			if len(cells_used) == total_cells:
-				(game_over, userset, usercells) = whoWinner()
-				if game_over == True:
-					print("Got the winner, hurray. It is, ", userset)
-					print("And, it's in the cell combo: ", usercells)
-					print("/\\/\\" * 5 + " Game over buddies!!!! " + "/\\/\\" * 5 + "\n\n")
-					exit(0)
-				else:
-					print("#$" * 5 + "Hey, it's a TIE, game over")
-					exit(0)
-			else:
-				print("$&" * 5 + " {} free cells available in the grid".format(total_cells-len(cells_used)))
-				userDPlay()
-#		compPlay()
+	print("$&" * 5 + " {} free cells available in the grid".format(total_cells-len(cells_used)))
+	userAPlay()
 
-	# Based on valid input, fill the grid
-	# show the updated grid and prompt the
-	# next user to play
-	# if the number of moves by any user
-	# equals 3, then check valid arrangement
-	# of cells and determine if there are any
-	# winners.
+	# TO DOs:
+	# 1. Choice to replay the game.
+	# 2. Enable compPlay()
 
 	return None
 
