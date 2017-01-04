@@ -166,7 +166,7 @@ def main():
 	This tool has certain pre-requisites:
 
 	youtube-dl
-	avconv or ffmpeg
+	ffprobe or avprobe
 
 	And, it has been tested on Ubuntu 16.04 LTS with Python v3.5.2
 	"""
