@@ -5,7 +5,9 @@
 import argparse
 import re
 import os
+import shutil
 import subprocess
+import fnmatch
 
 
 ## Ask the use for audio format
@@ -13,22 +15,35 @@ notime = " --no-mtime"
 utube_cmd = "youtube-dl "
 
 
+def renameFile(old_filename, new_filename):
 
-def modfileName(oldfile, newname):
+	""" rename media file as requested """
 
-	""" rename audio file as requested """
+	file_pattern = '*'
 
-	oldfile = oldfile.strip()
-	filname, ext = os.path.splitext(oldfile)
-	newfile = newname + ext
-	newfile = newfile.strip()
+	file_exists = fnmatch.fnmatch(old_filename, file_pattern)
+	if (file_exists):
+		print(" ==> {} exists in local filesystem directory".format(old_filename, file_exists))
+		##--> ugly kludge-ry necessary to match complete filename with wierd extensions!!!
+		this_file = old_filename + file_pattern
+		files = os.listdir('.')
+		for file_name in files:
+			match = re.search(this_file, file_name)
+			if (match):
+				print(" ==> Got the matching file...............", file_name)
+				old_filename = file_name
+				shutil.move(old_filename, new_filename)
+				rename_flag = True
+				break
+			else:
+				rename_flag = False
+	else:
+		rename_flag = False
 
-	oldfile = "'" + oldfile + "'"
-	newfile = "'" + newfile + "'"
-	print("{0} shall be renamed as {1}".format(oldfile, newfile))
-
-	if (os.path.exists(oldfile)):
-		subprocess.call('mv oldfile newfile')
+	if rename_flag:
+		print("\n=~=~>{} is the name of the new media file".format(new_filename))
+	else:
+		print("No file renaming operation happened.")
 
 	return None
 
@@ -58,6 +73,7 @@ def getVideo(link):
 	""" From the youtube link, extract the Video in the format chosen by the user """
 
 	title = getTitle(link)
+	title = title.strip()
 	video_type = askUser(link)
 
 	if (video_type == ""):
@@ -73,7 +89,18 @@ def getVideo(link):
 	
 	# to be used as filename
 	cmd_output = (xtraction.decode("utf-8")).split('\n')[5].split(':')[1]
-	print(" ==> Video is saved in {}".format(cmd_output))
+	print(" ==>Video is saved as {}".format(title))
+
+	user_choice = input("==> Do you want to rename {} (YES or NO):".format(title))
+	
+	if (user_choice.upper() == "YES"):
+		new_filename = input(" ==> Enter the name for the new file : ")
+		print(" ==> Video file shall be renamed as ", new_filename)
+		renameFile(title, new_filename)
+	elif (user_choice.upper() == "NO"):
+		print(" ==> Video file not renamed")
+	else:
+		print(" ==> Video file not renamed")
 
 	return None
 
@@ -105,25 +132,18 @@ def getAudio(link):
 	cmd_output = (xtraction.decode("utf-8")).split('\n')[5].split(':')[1]
 	print(" ==> Audio is saved in {}".format(cmd_output))
 
-	## Should find out why file cannot be renamed after the audio
-	## extraction is done???
-#	user_choice = input("\n== Do you want to retain this title? (YES or NO) : ")
-#	
-#	if (user_choice.upper() == "YES"):
-#		print("We shall retain the existing title.")
-#		print("{} is the title of the youtube link".format(title))
-#	elif (user_choice.upper() == "NO"):
-#		user_title = input("Give a new title of your choice : ")
-#		user_title.strip()
-##		modfileName(cmd_output, user_title)
-#		print("{} is the title of the youtube link".format(user_title))
-#	else:
-#		print("We shall retain the existing title.")
-#		print("{} is the title of the youtube link".format(title))
-
+	user_choice = input("==> Do you want to rename {} (YES or NO):".format(title))
+	
+	if (user_choice.upper() == "YES"):
+		new_filename = input(" ==> Enter the name for the new file : ")
+		print(" ==> Audio file shall be renamed as ", new_filename)
+		renameFile(cmd_output, new_filename)
+	elif (user_choice.upper() == "NO"):
+		print(" ==> Audio file not renamed")
+	else:
+		print(" ==> Audio file not renamed")
 
 	return None
-
 
 
 
@@ -175,7 +195,7 @@ def main():
 	parser = argparse.ArgumentParser(add_help=True)
 
 	parser.add_argument('link', action="store", help="Provide the youtube URL here")
-	parser.add_argument('type', action="store", help="Strip audio only or video")
+	parser.add_argument('type', action="store", help="Valid values: audio or video")
 	parsed_args = parser.parse_args()
 
 	

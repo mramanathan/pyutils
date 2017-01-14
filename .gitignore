@@ -1,5 +1,6 @@
 ## Misc
-*.mp3
+*.mp*
+*.jpg
 # vim temp files
 *.*~
 *.swp
