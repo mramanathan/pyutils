@@ -66,4 +66,4 @@ echo ${curdir}
 echo "~> checking flake8 availability..."
 which flake8
 
-flake8 --statistics -q --filename=*.py pyutils/
+flake8 --statistics -q --filename=*.py *
