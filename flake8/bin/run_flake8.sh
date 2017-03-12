@@ -17,6 +17,8 @@ if [ ! -d "$PYENV_ROOT/plugins/pyenv-virtualenv" ]; then
 fi
 
 curdir=pwd
+echo "~> Working dir..."
+echo ${curdir}
 
 # Update pyenv and pyenv-virtualenv
 echo "~> Updating pyenv and pyenv-virtualenv"
@@ -44,7 +46,6 @@ cat << PKGS > requirements.txt
     flake8-future-import
     flake8-import-order
     flake8-builtins
-    flake8-commons
     pepper8
     pep8-naming
 PKGS
@@ -65,7 +66,11 @@ pyenv virtualenvs
 echo "~> Installed Python packages:"
 pip freeze
 
-echo "~> Fetching sources to run flake8..."
-git clone https://github.com/mramanathan/pyutils.git
-cd pyutils
-flake8 --statistics -q pyutils/*
+curdir=pwd
+echo "~> Working dir..."
+echo ${curdir}
+
+echo "~> checking flake8 availability..."
+which flake8
+
+#flake8 --statistics -q pyutils/*
