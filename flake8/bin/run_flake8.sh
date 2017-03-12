@@ -47,6 +47,7 @@ cat << PKGS > requirements.txt
     flake8-import-order
     flake8-builtins
     pepper8
+    pep8
     pep8-naming
     tox
 PKGS
