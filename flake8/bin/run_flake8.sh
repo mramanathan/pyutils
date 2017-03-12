@@ -16,7 +16,7 @@ if [ ! -d "$PYENV_ROOT/plugins/pyenv-virtualenv" ]; then
   git clone https://github.com/yyuu/pyenv-virtualenv.git $PYENV_ROOT/plugins/pyenv-virtualenv
 fi
 
-curdir=pwd
+curdir=`pwd`
 echo "~> Working dir..."
 echo ${curdir}
 
@@ -66,7 +66,7 @@ pyenv virtualenvs
 echo "~> Installed Python packages:"
 pip freeze
 
-curdir=pwd
+curdir=`pwd`
 echo "~> Working dir..."
 echo ${curdir}
 
