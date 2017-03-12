@@ -38,17 +38,8 @@ pyenv virtualenv "${PYTHON_VERSION}" "${VENV_DIR}"
 echo "~> Installing flake8 packages..."
 cat << PKGS > requirements.txt
     flake8
-    flake8-builtins
-    flake8-pep257
-    flake8-mock
-    flake8-coding
-    flake8-print
-    flake8-future-import
-    flake8-import-order
-    flake8-builtins
     pepper8
     pep8
-    pep8-naming
     tox
 PKGS
 
