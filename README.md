@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/mramanathan/pyutils.svg?branch=master)](https://travis-ci.org/mramanathan/pyutils)
+
 # pyutils
 Home grown utilities built using Python
 
